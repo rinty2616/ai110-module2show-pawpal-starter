@@ -1,0 +1,41 @@
+classDiagram
+    class Owner {
+        +name: str
+        +daily_available_minutes: int
+        +preferred_time_of_day: str
+        +pets: list[Pet]
+        +add_pet(pet: Pet)
+        +get_pet(name: str) Pet
+        +get_all_tasks() list
+    }
+    class Pet {
+        +name: str
+        +species: str
+        +tasks: list[Task]
+        +add_task(task: Task)
+    }
+    class Task {
+        +title: str
+        +time: str
+        +due_date: date
+        +duration_minutes: int
+        +priority: str
+        +frequency: str
+        +completed: bool
+        +mark_complete()
+        +start_at() datetime
+        +end_at() datetime
+    }
+    class Scheduler {
+        +owner: Owner
+        +filter_tasks(on_date, pet_name, completed) list
+        -_preference_rank(task) int
+        +sort_by_time(records) list
+        +detect_conflicts(on_date) list
+        +mark_task_complete(pet_name, task) Task
+        +build_daily_plan(on_date, available_minutes) tuple
+        -_overlap(first, second) bool
+    }
+    Owner "1" o-- "0..*" Pet : owns
+    Pet "1" o-- "0..*" Task : contains
+    Scheduler --> Owner : calls get_all_tasks()
